@@ -2,6 +2,11 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
+const {loadStdlib} = require('@reach-sh/stdlib');
+const stdlib = loadStdlib('ALGO');
+stdlib.setWalletFallback(stdlib.walletFallback({
+	providerEnv: 'TestNet',
+}));
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds,
   GatewayIntentBits.GuildMessages,
@@ -30,6 +35,21 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+client.on('interactionCreate', async interaction => {
+	if(!interaction.isModalSubmit()) return;
+	const wallet = interaction.fields.getTextInputValue('address');
+	const fmt = (x) => stdlib.formatCurrency(x, 4);
+	const getBalance = async (who) => fmt(await stdlib.balanceOf(who));
+	console.log(wallet);//thisistwenty-fourletters
+	const acc = await stdlib.newAccountFromMnemonic('grant stumble hard agree enhance awful jar race side wrong blossom uniform sibling nose stay gesture stairs battle educate discover flee engine snap about visa')
+	const balance = await getBalance(acc);
+	//const balance = await stdlib.balanceOf(wallet);
+	
+	console.log(balance);
+	await interaction.reply({
+		content: 'Success!',
+	});
+})
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;
@@ -37,7 +57,6 @@ client.on('interactionCreate', async interaction => {
 	const command = interaction.client.commands.get(interaction.commandName);
 
 	if (!command) return;
-
 	try {
 		await command.execute(interaction);
 	} catch (error) {

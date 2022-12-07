@@ -1,0 +1,13 @@
+// can you import and run a reach program here?
+
+const bAfter = await getBalance(aAcc);
+
+module.exports = {
+  data: new SlashCommandBuilder()
+    .setName('payTest')
+    .setDescription('Get paid Test tokens'),
+  async execute(interaction){
+    await interaction.reply(bAfter);
+  },
+
+};
