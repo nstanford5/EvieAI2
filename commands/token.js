@@ -7,13 +7,13 @@ module.exports = {
   async execute(interaction, client) {
     const modal = new ModalBuilder()
       .setCustomId('register')
-      .setTitle('myModal');
+      .setTitle('Wallet Registration');
     const addrInput = new TextInputBuilder()
       .setCustomId('address')
       .setLabel('Enter your Algorand wallet Address')
       .setStyle("Short")
-      .setMaxLength(24)
-      .setMinLength(24)
+      .setMaxLength(58)
+      .setMinLength(58)
       .setPlaceholder('Enter wallet address here')
       .setRequired(true);
     const firstActionRow = new ActionRowBuilder().addComponents(addrInput);

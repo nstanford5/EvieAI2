@@ -39,15 +39,9 @@ client.on('interactionCreate', async interaction => {
 	if(!interaction.isModalSubmit()) return;
 	const wallet = interaction.fields.getTextInputValue('address');
 	const fmt = (x) => stdlib.formatCurrency(x, 4);
-	const getBalance = async (who) => fmt(await stdlib.balanceOf(who));
-	console.log(wallet);//thisistwenty-fourletters
-	const acc = await stdlib.newAccountFromMnemonic('grant stumble hard agree enhance awful jar race side wrong blossom uniform sibling nose stay gesture stairs battle educate discover flee engine snap about visa')
-	const balance = await getBalance(acc);
-	//const balance = await stdlib.balanceOf(wallet);
-	
-	console.log(balance);
+	const balance = fmt(await stdlib.balanceOf(wallet));
 	await interaction.reply({
-		content: 'Success!',
+		content: `Your balance is: ${balance}`,
 	});
 })
 
