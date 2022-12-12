@@ -37,9 +37,13 @@ for (const file of eventFiles) {
 }
 client.on('interactionCreate', async interaction => {
 	if(!interaction.isModalSubmit()) return;
+	const testRole = '1051908137340375120';
 	const wallet = interaction.fields.getTextInputValue('address');
 	const fmt = (x) => stdlib.formatCurrency(x, 4);
 	const balance = fmt(await stdlib.balanceOf(wallet));
+	if(balance > 100){
+		interaction.member.roles.add(testRole).catch(console.error);
+	}
 	await interaction.reply({
 		content: `Your balance is: ${balance}`,
 	});

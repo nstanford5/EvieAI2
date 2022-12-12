@@ -2,7 +2,7 @@ const {ModalBuilder, SlashCommandBuilder, ActionRowBuilder, TextInputBuilder} = 
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('tokencheck')
+    .setName('register')
     .setDescription('Register your token'),
   async execute(interaction, client) {
     const modal = new ModalBuilder()
