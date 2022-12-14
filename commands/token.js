@@ -4,7 +4,7 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName('register')
     .setDescription('Register your token'),
-  async execute(interaction, client) {
+  async execute(interaction) {
     const modal = new ModalBuilder()
       .setCustomId('register')
       .setTitle('Wallet Registration');
@@ -14,7 +14,7 @@ module.exports = {
       .setStyle("Short")
       .setMaxLength(58)
       .setMinLength(58)
-      .setPlaceholder('Enter wallet address here')
+      .setPlaceholder('Algorand address only')
       .setRequired(true);
     const firstActionRow = new ActionRowBuilder().addComponents(addrInput);
     modal.addComponents(firstActionRow);

@@ -37,16 +37,28 @@ for (const file of eventFiles) {
 }
 client.on('interactionCreate', async interaction => {
 	if(!interaction.isModalSubmit()) return;
-	const testRole = '1051908137340375120';
+	const role = '1052276254407147580';
+	const reachThank = '545293434';
+	const MIN = 1;
+	let result = false;
 	const wallet = interaction.fields.getTextInputValue('address');
-	const fmt = (x) => stdlib.formatCurrency(x, 4);
-	const balance = fmt(await stdlib.balanceOf(wallet));
-	if(balance > 100){
-		interaction.member.roles.add(testRole).catch(console.error);
+	try {
+		stdlib.protect(stdlib.T_Address, wallet);
+		const balance = await stdlib.balanceOf(wallet, reachThank);
+		if(balance >= MIN){
+			interaction.member.roles.add(role).catch(console.error);
+			result = true;
+		}
+		await interaction.reply({
+			content: `You have ${stdlib.bigNumberToNumber(balance)} Reach Thank You tokens.\nYour wallet has been registered is ${result}\nYou have just been assigned a new role!`,
+			ephemeral: true,
+		});
+	} catch(e) {
+		await interaction.reply({
+			content: `The Address you supplied:\n'${wallet}'\n seems to be malformed.\n\nPlease try again.`,
+			ephemeral: true,
+		});
 	}
-	await interaction.reply({
-		content: `Your balance is: ${balance}`,
-	});
 })
 
 client.on('interactionCreate', async interaction => {
