@@ -35,6 +35,69 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
+client.on('interactionCreate', async interaction => {
+	if(!interaction.isButton()) return;
+	// chain conditionals here for different contracts
+	if(interaction.customId === 'nft-auction'){
+		/**
+		* This runs the NFT Auction program.
+		*/
+		await interaction.reply('Starting NFT Auction...');//add exception handling here
+		const backend = await import('./reachf/build/index.main.mjs');
+		const accA = await stdlib.newAccountFromMnemonic('profit cherry reflect dinner warfare lawn imitate prevent gun force trust brain trophy foil cheese ankle snow time valid churn captain bird busy able tide');
+		const ctcA = accA.contract(backend);
+		let number = 0;
+		const theNFT = await stdlib.launchToken(accA, "bumple", "NFT", { supply: 1});
+		const nftId = theNFT.id;
+		const minBid = stdlib.parseCurrency(1);
+		const lenInBlocks = 10;
+		const params = {nftId, minBid, lenInBlocks};
+		const bidders = [];
+		//const wallet = interaction.fields.getTextInputValue('address');
+		const startBidders = async () => {
+			let bid = minBid;
+			const sbal = stdlib.parseCurrency(5);
+			const runBidder = async(who) => {
+				const inc = stdlib.parseCurrency(Math.random() * 3);
+				bid = bid.add(inc);
+				const acc = await stdlib.createAccount();
+				await stdlib.transfer(accA, acc, sbal);
+				await acc.tokenAccept(nftId);
+				bidders.push([who, acc]);
+				const ctc = acc.contract(backend, ctcA.getInfo());
+				const getBal = async () => stdlib.formatCurrency(await stdlib.balanceOf(acc));
+				interaction.channel.send(`${who} decides to bid ${stdlib.formatCurrency(bid)}.`);
+				interaction.channel.send(`${who} balance before is ${await getBal()}`);
+				try{
+					const [lastBidder, lastBid] = await ctc.apis.Bidder.bid(bid);
+					interaction.channel.send(`${who} out bid ${lastBidder} who bid ${stdlib.formatCurrency(lastBid)}.`);
+				} catch (e) {
+					interaction.channel.send(`${who} failed to bid, because the auction is over`);
+				}
+				interaction.channel.send(`${who} balance after is ${await getBal()}`);
+			};
+			await runBidder('Alice');
+			await runBidder('Bob');
+			await runBidder('Claire');
+		}
+		await ctcA.p.Creator({
+			getSale: () => {
+				interaction.channel.send(`Creator sets parameters of sale: `, params);
+				return params;
+			},
+			auctionReady: () => {
+				startBidders();
+			},
+			seeBid: (who, amt) => {
+				interaction.channel.send(`Creator saw that ${stdlib.formatAddress(who)} bid ${stdlib.formatCurrency(amt)}.`);
+			},
+			showOutcome: (winner, amt) => {
+				interaction.channel.send(`Creator saw that ${stdlib.formatAddress(winner)} won with ${stdlib.formatCurrency(amt)}`);
+			},
+		});
+		interaction.channel.send(`Auction complete!`);
+		};
+});
 /**
  * This checks, given a users wallet address, if they have
  * at least 1 Reach Thank You Token. If yes, gives them a role
@@ -46,6 +109,7 @@ client.on('interactionCreate', async interaction => {
 	const REACH_THANKU = '545293434';
 	const MIN = 1;
 	let result = false;
+	const wallet = interaction.fields.getTextInputValue('address');
 
 	try {
 		stdlib.protect(stdlib.T_Address, wallet);
@@ -66,66 +130,7 @@ client.on('interactionCreate', async interaction => {
 	}
 });
 
-/**
- * This runs the NFT Auction program.
- */
-// client.on('interactionCreate', async interaction => {
-// 	if(!interaction.isModalSubmit()) return;
-// 	await interaction.reply('Received!');//add exception handling here
-// 	const backend = await import('./build/index.main.mjs');
-// 	const accA = await stdlib.newAccountFromMnemonic('profit cherry reflect dinner warfare lawn imitate prevent gun force trust brain trophy foil cheese ankle snow time valid churn captain bird busy able tide');
-// 	const ctcA = accA.contract(backend);
-// 	let number = 0;
-// 	const theNFT = await stdlib.launchToken(accA, "bumple", "NFT", { supply: 1});
-// 	const nftId = theNFT.id;
-// 	const minBid = stdlib.parseCurrency(1);
-// 	const lenInBlocks = 10;
-// 	const params = {nftId, minBid, lenInBlocks};
-// 	const bidders = [];
-// 	const wallet = interaction.fields.getTextInputValue('address');
-// 	const startBidders = async () => {
-// 		let bid = minBid;
-// 		const sbal = stdlib.parseCurrency(5);
-// 		const runBidder = async(who) => {
-// 			const inc = stdlib.parseCurrency(Math.random() * 3);
-// 			bid = bid.add(inc);
-// 			const acc = await stdlib.createAccount();
-// 			await stdlib.transfer(accA, acc, sbal);
-// 			await acc.tokenAccept(nftId);
-// 			bidders.push([who, acc]);
-// 			const ctc = acc.contract(backend, ctcA.getInfo());
-// 			const getBal = async () => stdlib.formatCurrency(await stdlib.balanceOf(acc));
-// 			interaction.channel.send(`${who} decides to bid ${stdlib.formatCurrency(bid)}.`);
-// 			interaction.channel.send(`${who} balance before is ${await getBal()}`);
-// 			try{
-// 				const [lastBidder, lastBid] = await ctc.apis.Bidder.bid(bid);
-// 				interaction.channel.send(`${who} out bid ${lastBidder} who bid ${stdlib.formatCurrency(lastBid)}.`);
-// 			} catch (e) {
-// 				interaction.channel.send(`${who} failed to bid, because the auction is over`);
-// 			}
-// 			interaction.channel.send(`${who} balance after is ${await getBal()}`);
-// 		};
-// 		await runBidder('Alice');
-// 		await runBidder('Bob');
-// 		await runBidder('Claire');
-// 	}
-// 	await ctcA.p.Creator({
-// 		getSale: () => {
-// 			interaction.channel.send(`Creator sets parameters of sale: `, params);
-// 			return params;
-// 		},
-// 		auctionReady: () => {
-// 			startBidders();
-// 		},
-// 		seeBid: (who, amt) => {
-// 			interaction.channel.send(`Creator saw that ${stdlib.formatAddress(who)} bid ${stdlib.formatCurrency(amt)}.`);
-// 		},
-// 		showOutcome: (winner, amt) => {
-// 			interaction.channel.send(`Creator saw that ${stdlib.formatAddress(winner)} won with ${stdlib.formatCurrency(amt)}`);
-// 		},
-// 	});
-// 	interaction.channel.send(`Auction complete!`);
-// });
+
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isChatInputCommand()) return;

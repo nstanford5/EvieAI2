@@ -1,0 +1,623 @@
+#pragma version 8
+// resource: R_Txn
+txn ApplicationID
+bz alloc
+byte base64()
+app_global_get
+dup
+int 0
+extract_uint64
+store 1 // GV_currentStep :: UInt
+int 8
+extract_uint64
+store 2 // GV_currentTime :: UInt
+byte base64(AA==)
+app_global_get
+preamble:
+pushbytess base64(A6+jPA==) base64(EC8NoA==) base64(EX9yaA==) base64(JlIGNQ==) base64(iXOhig==) base64(nbnoaQ==) base64(39kjKA==) base64(8TfIRA==)
+txna ApplicationArgs 0
+match _reachp_0 Bidder_bid_uint6goQHXCnK_wHARKLsCoUm_iSsXW1kHoqBIeA9oHisRXI_ min__uint64wrNe4_5xcZWM8rKjfkd0htf8SlghxZp8phlIX0mnaCc_ _reachp_3 nft__uint64PTeEClFPLnV3yKGamM8meWYcmtX7ajf37dIbY8WYEyE_ currBid__uint64q8bPzTRdGKdYPA3mE5nkGPLOfnSGoBHDLzISqyjit0w_ _reachp_1 _reachp_4
+errl:
+err
+Bidder_bid_uint6goQHXCnK_wHARKLsCoUm_iSsXW1kHoqBIeA9oHisRXI_:
+txna ApplicationArgs 1
+btoi
+store 11 // v650
+_reacha_Bidder_bid:
+int 8
+bzero
+load 11 // v650
+itob
+concat
+store 11 // v662
+_reachi_3:
+int 5
+load 1 // GV_currentStep :: UInt
+==
+assert
+callsub l2_LF_svsLoad_5
+load 11 // v662
+int 0
+extract_uint64
+store 12 // v661
+load 11 // v662
+extract 8 8
+store 22 // .fork66.msg/347
+byte base64(Dc0vMA==)
+load 12 // v661
+itob
+concat
+load 22 // .fork66.msg/347
+concat
+log // up to 20 bytes
+// ^ log: "_reach_e3" [v661,.fork66.msg/347] "_reach_e3(uint64,(uint64))"
+load 12 // v661
+callsub l3_LF_timeCheck
+global Round
+load 18 // value/309
+<
+assert
+_api_Bidder_bid3:
+load 22 // .fork66.msg/347
+btoi
+dup
+store 11 // bid/351
+load 15 // lastPrice/312
+>
+assert
+// ^ Claim: bid is too low
+// at reach standard library:57:5:application
+// at ./index.rsh:45:12:application call to "check" (defined at: reach standard library:49:32:function exp)
+// at ./index.rsh:44:29:application call to [unknown function] (defined at: ./index.rsh:44:29:function exp)
+// at ./index.rsh:44:29:application call to [unknown function] (defined at: ./index.rsh:44:29:function exp)
+load 11 // bid/351
+callsub l8_LF_checkTxn_False
+// ^ CheckPay
+// at ./index.rsh:37:19:dot
+load 17 // highestBidder/310
+load 15 // lastPrice/312
+itob
+concat
+store 12 // v360
+byte base64(AAAAAAAAAWg=)
+load 12 // v360
+concat
+log // up to 48 bytes
+load 12 // v360
+store 4 // GV_apiRet :: Null
+load 16 // isFirstBid/311
+bz l9_ifF
+txn Sender
+int 0
+load 11 // bid/351
+global Round
+load 14 // thisConsensusTime/313
+store 13 // lastConsensusTime/314
+store 14 // thisConsensusTime/313
+store 15 // lastPrice/312
+store 16 // isFirstBid/311
+store 17 // highestBidder/310
+_reachl_2:
+load 13 // lastConsensusTime/314
+load 18 // value/309
+<=
+bz l11_ifF
+l12_LF_svsDump_5:
+load 21 // Creator/284
+load 20 // nftId/285
+itob
+concat
+load 19 // minBid/286
+itob
+concat
+load 18 // value/309
+itob
+concat
+load 17 // highestBidder/310
+concat
+load 16 // isFirstBid/311
+itob
+substring 7 8
+concat
+load 15 // lastPrice/312
+itob
+concat
+load 14 // thisConsensusTime/313
+itob
+concat
+int 5
+global Round
+updateStateNoOp:
+store 2 // GV_currentTime :: UInt
+store 1 // GV_currentStep :: UInt
+byte base64(AA==)
+swap
+extract 0 105
+app_global_put
+byte base64()
+load 1 // GV_currentStep :: UInt
+itob
+load 2 // GV_currentTime :: UInt
+itob
+concat
+app_global_put
+txn OnCompletion
+int NoOp
+==
+assert
+// checked on completion
+callsub l15_LF_updateMbr
+updateState:
+load 3 // GV_wasntMeth :: Bool
+bnz done
+apiReturn_noCheck:
+byte base64(FR98dQ==)
+load 4 // GV_apiRet :: Null
+concat
+log // up to 44 bytes
+done:
+int 1
+return
+_reacha_currBid:
+load 1 // GV_currentStep :: UInt
+int 5
+==
+assert
+// ^ Claim: Incorrect state: not leaf
+// at ./index.rsh:20:12:property binding
+callsub l2_LF_svsLoad_5
+load 15 // lastPrice/312
+itob
+store 4 // GV_apiRet :: Null
+apiReturn_check:
+txn OnCompletion
+int NoOp
+==
+assert
+// checked on completion
+b apiReturn_noCheck
+_reacha_min:
+load 1 // GV_currentStep :: UInt
+int 5
+==
+assert
+// ^ Claim: Incorrect state: not leaf
+// at ./index.rsh:18:8:property binding
+callsub l2_LF_svsLoad_5
+load 19 // minBid/286
+itob
+store 4 // GV_apiRet :: Null
+b apiReturn_check
+_reacha_nft:
+load 1 // GV_currentStep :: UInt
+int 5
+==
+assert
+// ^ Claim: Incorrect state: not leaf
+// at ./index.rsh:19:8:property binding
+callsub l2_LF_svsLoad_5
+load 20 // nftId/285
+itob
+store 4 // GV_apiRet :: Null
+b apiReturn_check
+_reachi_0:
+txn Sender
+store 21 // Creator/284
+global Round
+store 11 // thisConsensusTime/288
+load 13 // v656
+int 0
+extract_uint64
+store 14 // v655
+load 13 // v656
+int 8
+extract_uint64
+store 20 // nftId/285
+load 13 // v656
+int 16
+extract_uint64
+store 19 // minBid/286
+load 13 // v656
+int 24
+extract_uint64
+store 12 // lenInBlocks/287
+byte base64(9u2r0g==)
+load 14 // v655
+itob
+concat
+load 20 // nftId/285
+itob
+concat
+load 19 // minBid/286
+itob
+concat
+load 12 // lenInBlocks/287
+itob
+concat
+log // up to 36 bytes
+// ^ log: "_reach_e0" [v655,nftId/285,minBid/286,lenInBlocks/287] "_reach_e0(uint64,uint64,uint64,uint64)"
+load 14 // v655
+callsub l3_LF_timeCheck
+int 100000
+callsub l1_LF_mbrAdd
+int 0
+// resource: R_Asset
+load 20 // nftId/285
+global CurrentApplicationAddress
+callsub l4_LF_makeTxn_False_False_True_True
+l5_LF_svsDump_1:
+load 21 // Creator/284
+load 20 // nftId/285
+itob
+concat
+load 19 // minBid/286
+itob
+concat
+load 12 // lenInBlocks/287
+itob
+concat
+load 11 // thisConsensusTime/288
+itob
+concat
+int 41
+bzero
+concat
+int 1
+global Round
+b updateStateNoOp
+_reachi_1:
+int 1
+load 1 // GV_currentStep :: UInt
+==
+assert
+l6_LF_svsLoad_1:
+dup
+extract 0 32
+store 21 // Creator/284
+dup
+int 32
+extract_uint64
+store 20 // nftId/285
+dup
+int 40
+extract_uint64
+store 19 // minBid/286
+dup
+int 48
+extract_uint64
+store 12 // lenInBlocks/287
+int 56
+extract_uint64
+store 11 // thisConsensusTime/288
+load 18 // v659
+btoi
+store 22 // v658
+byte base64(1RUZFA==)
+load 22 // v658
+itob
+concat
+log // up to 12 bytes
+// ^ log: "_reach_e1" [v658] "_reach_e1(uint64)"
+load 22 // v658
+callsub l3_LF_timeCheck
+int 1
+load 20 // nftId/285
+l7_LF_checkTxn_True:
+// resource: R_Txn
+txn GroupIndex
+load 0 // GV_txnCounter :: UInt
+int 1
++
+dup
+store 0 // GV_txnCounter :: UInt
+-
+dupn 3
+gtxns AssetReceiver
+global CurrentApplicationAddress
+==
+assert
+gtxns TypeEnum
+int axfer
+==
+assert
+gtxns XferAsset
+uncover 2
+==
+assert
+gtxns AssetAmount
+==
+assert
+// ^ CheckPay
+// at ./index.rsh:30:11:dot
+load 21 // Creator/284
+txn Sender
+==
+assert
+// ^ Claim: sender correct
+// at ./index.rsh:30:11:dot
+load 11 // thisConsensusTime/288
+load 12 // lenInBlocks/287
++
+store 18 // value/309
+load 21 // Creator/284
+int 1
+load 19 // minBid/286
+global Round
+load 11 // thisConsensusTime/288
+store 13 // lastConsensusTime/314
+store 14 // thisConsensusTime/313
+store 15 // lastPrice/312
+store 16 // isFirstBid/311
+store 17 // highestBidder/310
+b _reachl_2
+_reachi_4:
+int 5
+load 1 // GV_currentStep :: UInt
+==
+assert
+callsub l2_LF_svsLoad_5
+load 11 // v665
+btoi
+store 12 // v664
+byte base64(+YuveA==)
+load 12 // v664
+itob
+concat
+log // up to 12 bytes
+// ^ log: "_reach_e4" [v664] "_reach_e4(uint64)"
+load 12 // v664
+callsub l3_LF_timeCheck
+global Round
+load 18 // value/309
+>=
+assert
+load 21 // Creator/284
+txn Sender
+==
+assert
+// ^ Claim: sender correct
+// at ./index.rsh:57:15:dot
+// at ./index.rsh:56:36:application call to [unknown function] (defined at: ./index.rsh:56:36:function exp)
+global Round
+load 14 // thisConsensusTime/313
+store 13 // lastConsensusTime/314
+store 14 // thisConsensusTime/313
+b _reachl_2
+_reachp_0:
+callsub l0_LF_wasntMeth
+int 100000
+callsub l1_LF_mbrAdd
+txna ApplicationArgs 1
+store 13 // v656
+b _reachi_0
+_reachp_1:
+callsub l0_LF_wasntMeth
+txna ApplicationArgs 1
+store 18 // v659
+b _reachi_1
+_reachp_3:
+callsub l0_LF_wasntMeth
+txna ApplicationArgs 1
+store 11 // v662
+b _reachi_3
+_reachp_4:
+callsub l0_LF_wasntMeth
+txna ApplicationArgs 1
+store 11 // v665
+b _reachi_4
+alloc:
+int 0
+txn GlobalNumUint
+==
+assert
+int 2
+txn GlobalNumByteSlice
+==
+assert
+int 0
+txn LocalNumUint
+==
+assert
+int 0
+txn LocalNumByteSlice
+==
+assert
+callsub l0_LF_wasntMeth
+int 105
+bzero
+int 0
+int 0
+b updateStateNoOp
+currBid__uint64q8bPzTRdGKdYPA3mE5nkGPLOfnSGoBHDLzISqyjit0w_:
+b _reacha_currBid
+l11_ifF:
+int 1
+// resource: R_Asset
+load 20 // nftId/285
+// resource: R_Account
+load 17 // highestBidder/310
+callsub l4_LF_makeTxn_False_False_True_True
+load 16 // isFirstBid/311
+bz l13_ifF
+// resource: R_Account
+int 0
+load 20 // nftId/285
+global CurrentApplicationAddress
+global CreatorAddress
+callsub l14_LF_makeTxn_False_True_True_True
+updateStateHalt:
+txn OnCompletion
+int DeleteApplication
+==
+assert
+// checked on completion
+callsub l15_LF_updateMbr
+// resource: R_Account
+int 0
+global CurrentApplicationAddress
+global CreatorAddress
+callsub l16_LF_makeTxn_False_True_False_True
+b updateState
+l13_ifF:
+load 15 // lastPrice/312
+// resource: R_Account
+load 21 // Creator/284
+callsub l10_LF_makeTxn_False_False_False_True
+// resource: R_Account
+int 0
+load 20 // nftId/285
+global CurrentApplicationAddress
+global CreatorAddress
+callsub l14_LF_makeTxn_False_True_True_True
+b updateStateHalt
+l17_LF_makeTxnK_False_True:
+int 0
+itxn_field Fee
+int pay
+itxn_field TypeEnum
+itxn_field Receiver
+itxn_field Amount
+itxn_submit
+retsub
+l18_LF_makeTxnK_True_True:
+int 0
+itxn_field Fee
+int axfer
+itxn_field TypeEnum
+itxn_field AssetReceiver
+itxn_field XferAsset
+itxn_field AssetAmount
+itxn_submit
+retsub
+l9_ifF:
+load 15 // lastPrice/312
+// resource: R_Account
+load 17 // highestBidder/310
+callsub l10_LF_makeTxn_False_False_False_True
+txn Sender
+int 0
+load 11 // bid/351
+global Round
+load 14 // thisConsensusTime/313
+store 13 // lastConsensusTime/314
+store 14 // thisConsensusTime/313
+store 15 // lastPrice/312
+store 16 // isFirstBid/311
+store 17 // highestBidder/310
+b _reachl_2
+min__uint64wrNe4_5xcZWM8rKjfkd0htf8SlghxZp8phlIX0mnaCc_:
+b _reacha_min
+nft__uint64PTeEClFPLnV3yKGamM8meWYcmtX7ajf37dIbY8WYEyE_:
+b _reacha_nft
+updateMbr_eq:
+pop
+retsub
+updateMbr_neg:
+swap
+-
+dup
+store 6 // GV_mbrAdd :: UInt
+global CreatorAddress
+callsub l10_LF_makeTxn_False_False_False_True
+retsub
+updateMbr_pos_eq:
+-
+dup
+bz updateMbr_eq
+dup
+store 6 // GV_mbrAdd :: UInt
+callsub l8_LF_checkTxn_False
+retsub
+l2_LF_svsLoad_5:
+dup
+extract 0 32
+store 21 // Creator/284
+dup
+int 32
+extract_uint64
+store 20 // nftId/285
+dup
+int 40
+extract_uint64
+store 19 // minBid/286
+dup
+int 48
+extract_uint64
+store 18 // value/309
+dup
+extract 56 32
+store 17 // highestBidder/310
+dup
+extract 88 1
+btoi
+store 16 // isFirstBid/311
+dup
+int 89
+extract_uint64
+store 15 // lastPrice/312
+int 97
+extract_uint64
+store 14 // thisConsensusTime/313
+retsub
+l0_LF_wasntMeth:
+int 1
+store 3 // GV_wasntMeth :: Bool
+retsub
+l3_LF_timeCheck:
+dup
+int 0
+==
+swap
+load 2 // GV_currentTime :: UInt
+==
+||
+assert
+retsub
+l10_LF_makeTxn_False_False_False_True:
+itxn_begin
+b l17_LF_makeTxnK_False_True
+l8_LF_checkTxn_False:
+// resource: R_Txn
+txn GroupIndex
+load 0 // GV_txnCounter :: UInt
+int 1
++
+dup
+store 0 // GV_txnCounter :: UInt
+-
+dupn 2
+gtxns Receiver
+global CurrentApplicationAddress
+==
+assert
+gtxns TypeEnum
+int pay
+==
+assert
+gtxns Amount
+==
+assert
+retsub
+l4_LF_makeTxn_False_False_True_True:
+itxn_begin
+b l18_LF_makeTxnK_True_True
+l1_LF_mbrAdd:
+load 6 // GV_mbrAdd :: UInt
++
+store 6 // GV_mbrAdd :: UInt
+retsub
+l15_LF_updateMbr:
+load 6 // GV_mbrAdd :: UInt
+load 7 // GV_mbrSub :: UInt
+dup2
+>=
+bz updateMbr_neg
+b updateMbr_pos_eq
+l14_LF_makeTxn_False_True_True_True:
+itxn_begin
+itxn_field AssetCloseTo
+b l18_LF_makeTxnK_True_True
+l16_LF_makeTxn_False_True_False_True:
+itxn_begin
+itxn_field CloseRemainderTo
+b l17_LF_makeTxnK_False_True
