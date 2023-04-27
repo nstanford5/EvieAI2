@@ -17,13 +17,13 @@ module.exports = {
           .setLabel('NFT Auction')
           .setStyle(ButtonStyle.Primary),
         new ButtonBuilder()
-          .setCustomId('secondary')
-          .setLabel('NFT Raffle')
-          .setStyle(ButtonStyle.Primary)
-          .setDisabled(true),
-        new ButtonBuilder()
           .setCustomId('daily-lottery')
           .setLabel('Daily Lottery')
+          .setStyle(ButtonStyle.Primary)
+          .setDisabled(false),
+        new ButtonBuilder()
+          .setCustomId('secondary')
+          .setLabel('NFT Raffle')
           .setStyle(ButtonStyle.Primary)
           .setDisabled(true),
         new ButtonBuilder()
