@@ -6,7 +6,7 @@
  * 
  * Features implemented:
  * Map, Set, Types, Feedback,views,  docs, faucets, parallelReduce, API, enum,
- * docker, jpmiller, nftMami, beard vs. mustache, deploy(), ParticipantClass,
+ * docker, nftMami, beard vs. mustache, deploy(), ParticipantClass,
  * balance zero at exit, install reach, iterate through maps, how do i consume map values,
  * deploying with no test tokens error, reach update/releases channel, Bytes,
  * balance insufficient for transfer, expected x args got y, invalid unbound identifier,
@@ -20,7 +20,7 @@
  * api called in wrong state
  * check > asumme/require
  * difference between testnet, mainnet, devnet
- * 
+ * cannot unpack an array with 0 elements
  * 
  * 
  * Author: Nick Stanford
@@ -32,10 +32,8 @@ module.exports = {
   name: 'messageCreate',
   async execute(message){
     if(message.author.bot) return;
-        // if the user tags Evie
     if(message.mentions.has('1025903201871990864') && (message.content.includes("map") && (!message.content.includes("value") && (!message.content.includes("iterate"))))) {
       await message.reply("A Map is a set of key:value pairs.\n" +
-        "On Algorand all maps must have an Address type as their key. This restriction will soon be lifted.\n" +
         "Maps are the only variably sized container in Reach.\n" +
         "They must be created in a consensus step.\n" +
         "The syntax to create a Map is `const pMap = new Map(Address, UInt)` "+
@@ -234,6 +232,9 @@ module.exports = {
     } else if (message.mentions.has('1025903201871990864') && (message.mentions.has('1072591948499664996'))) {
       await message.reply("I know that punk -- tell him to meet me out back, so we can have a word about territory.");
       return;
+    } else if (message.mentions.has('1025903201871990864') && (message.content.includes('GM') || message.content.includes('Good Morning') || message.content.includes('good morning'))){
+      await message.reply("Gooooood Morning! How are we feeling today?");
+      return;      
     } else if (message.mentions.has('1025903201871990864')) {
       await message.reply("Sorry, I haven't learned about that one yet. But I've logged it for Nick to teach me -- I want to learn everything about Reach!");
         // need to actually log these responses so that I can add them later
